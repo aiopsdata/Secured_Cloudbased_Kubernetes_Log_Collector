@@ -7,11 +7,8 @@ metadata:
     app: kibana
 data:
   kibana.yml: |-
-#    SecretKey: XPACK_SECURITY_ENABLED
-#    SecretValue: '"true"'
     server.host: 0.0.0.0
     elasticsearch:
       hosts: ${ELASTICSEARCH_HOSTS}
       username: ${ELASTICSEARCH_USER}
       password: ${ELASTICSEARCH_PASSWORD}
-#      xpack.security.encryptionKey: ${XPACK_SECURITY_ENABLED}
