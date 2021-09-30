@@ -26,7 +26,7 @@ env:
   cloudPassword: PASSWORD	
   cloudPasswordValue: aKDqw0Dq
   cloud: CLOUD
-  cloudValue: cloud
+  cloudValue: host
   esUserKey: ESUSER
   esUserValue: admin
   
