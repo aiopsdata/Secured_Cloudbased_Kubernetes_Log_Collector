@@ -26,8 +26,6 @@ spec:
           value: {{.Values.esurl}}
         - name: ELASTICSEARCH_USER
           value: {{.Values.esuser}}
-#        - name: XPACK_SECURITY_ENABLED
-#          value: {{.Values.secretval}}
         - name: ELASTICSEARCH_PASSWORD
           valueFrom:
             secretKeyRef:
