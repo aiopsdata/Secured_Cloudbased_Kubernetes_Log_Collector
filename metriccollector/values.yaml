@@ -1,0 +1,41 @@
+prometheus:
+  metadata:
+    name: metricollector
+    namespace: aiops
+  replicaCount: 1
+  containers:
+    name: metricollector
+    image: aiopsdata/cloudmetricollector
+    imagePullPolicy: Always
+  
+env:
+  ESConnectionKey: ELASTICSEARCH_URL
+  ESConnectionValue: "elasticsearch:9200"
+  metricLogIndexKey: INDEX_NAME
+  metricLogIndexValue: metriclog
+  metricLogDocKey: DOC_TYPE
+  metricLogDocValue: metric
+  metricApiKey: METRIC_API
+  metricApiValue: metrics.k8s.io
+  metricApiVerKey: METRIC_VERSION
+  metricApiVerValue: v1beta1
+  cloudId: CLOUD_ID
+  cloudIdValue: "https://elasticsearch-52410-0.cloudclusters.net:17058"
+  cloudUser: USER
+  cloudUserValue: elastic
+  cloudPassword: PASSWORD	
+  cloudPasswordValue: aKDqw0Dq
+  cloud: CLOUD
+  cloudValue: cloud
+  esUserKey: ESUSER
+  esUserValue: admin
+  
+  prometheusLogIndexKey: PINDEX_NAME
+  prometheusLogIndexValue: prometheuslog
+  prometheusLogDocKey: PDOC_TYPE
+  prometheusLogDocValue: prometheus
+  prometheusUrlKey: PROMETHEUS_URL
+  prometheusUrlValue: "http://node-exporter-prometheus-node-exporter:9100/metrics"
+  
+  
+  

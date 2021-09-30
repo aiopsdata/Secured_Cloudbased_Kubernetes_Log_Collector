@@ -1,0 +1,6 @@
+esurl: "http://elasticsearch:9200"
+esuser: elastic
+#secretval: '"true"'
+#SecretKey: XPACK_SECURITY_ENABLED
+#SecretValue: '"true"'
+#xpack.security.encryptionKey: '"true"'
