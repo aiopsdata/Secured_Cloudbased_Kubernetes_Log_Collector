@@ -96,4 +96,30 @@ or
 ```bash
 ./install.sh -m
 ```
+<br/><br/>
+## :snowflake:Access Components After Deployment
+Run ``` minikube ip ``` to get your minikube ip address, which will help you in accessing different components.
+<br/>
+**Access Elasticsearch**
+```bash 
+http://minikubeip:32000
+```
 
+**Access Kibana**
+```bash 
+http://minikubeip:32002
+```
+
+**Access Prometheus** 
+<br/>
+ For accessing prometheus you need to get the URL on which application is running then you need to forward the port to access it on your host system.
+```bash 
+export POD_NAME=$(kubectl get pods --namespace aiops -l "app=prometheus-node-exporter,release=node-exporter" -o jsonpath="{.items[0].metadata.name}")
+```
+```bash 
+kubectl port-forward --namespace aiops $POD_NAME 9100
+```
+After above steps, prometheus will be available on.
+```bash
+http://localhost:9100
+```
