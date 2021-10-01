@@ -1,7 +1,7 @@
 #!/bin/bash
 log="0"
 metric="0"
-elastic="0"
+elasticsearch="0"
 kibana="0"
 cloud="0"
 cloud_id="0"
@@ -20,7 +20,7 @@ do
      s) system_name=${OPTARG};;
      l) log="1";;
      m) metric="1";;
-     e) elastic="1";;
+     e) elasticsearch="1";;
      k) kibana="1";;
     esac
 done
@@ -28,7 +28,7 @@ done
 
 if [[ $system_name == "0" ]]
 then 
-	echo "System Name cannot be empty, please enter System Name : "
+	echo "System Role Name cannot be empty, please enter System Name : "
 	read system_name	
 fi
 
@@ -56,18 +56,21 @@ kubectl apply -f rbc.yaml
 if [[ $cloud == "0" ]]
 then
 
-    echo "Enter your User name (In small cases): "
+    echo "Enter your User Index name (In small cases): "
     read local_user
-    printf "Installing Elasticsearch"
+    printf "Installing Elasticsearch ..."
     helm install elasticsearch elastic --values elastic/values.yaml -n aiops
-    
+    echo "Creating elasticsearch container ... "    
     #**************************************************************************************************************
     #**************************************************************************************************************
-	OUTPUT="atul"
-	while [[ $OUTPUT == "atul" ]]
+	OUTPUT="random_string"
+	
+	echo "Generating Password ..."
+	
+	while [[ $OUTPUT == "random_string" ]]
 	do
 		OUT=()
-		mapfile -t OUT < <( kubectl exec -it -n aiops elasticsearch-0  -- bin/elasticsearch-setup-passwords auto -b )
+		mapfile -t OUT < <( kubectl exec -it -n aiops elasticsearch-0  -- bin/elasticsearch-setup-passwords auto -b 2> /dev/null)
 	
 		if [[ ${OUT[1]} == *"PASSWORD"* ]]
 		then
@@ -76,8 +79,7 @@ then
 		fi
 
 	done
-	echo "*******************************************************************"
-		echo " all string is : ${OUT[-2]}"	
+	echo "*******************************************************************"	
 	echo "*******************************************************************"
 	OIFS=$IFS
 	IFS=' '
@@ -89,8 +91,8 @@ then
 	es_password=${es_password//[[:space:]]}
 	echo "*******************************************************************" 
 
-	echo "ES_USER is : $es_user"
-	echo "ES_PASSWORD is : $es_password"
+	echo "ES_USERNAME : $es_user"
+	echo "ES_PASSWORD : $es_password"
 #	printf '%s\n' "${text//[[:space:]]}"
 
 	echo "*******************************************************************"
@@ -107,7 +109,7 @@ then
     if [[ $log == "1" ]]
     then
         printf "Deploying Logcollector"
-        helm install log logcollector/ --values logcollector/values.yaml --namespace aiops --set env.cloudUserValue=$es_user --set env.cloudPasswordValue=$es_password --set env.esUserValue=$system_name --set env.podLogIndexValue=$local_user --set env.eventLogIndexValue=$local_user
+        helm install log logcollector/ --values logcollector/values.yaml --namespace aiops --set env.cloudUserValue=$es_user --set env.cloudPasswordValue=$es_password --set env.esUserValue=$system_name --set env.podLogIndexValue=$local_user --set env.eventLogIndexValue=$local_user --set env.cloudValue="host"
     fi
     
     if [[ $metric == "1" ]]
@@ -119,19 +121,19 @@ then
 	helm install --namespace aiops node-exporter prometheus-community/prometheus-node-exporter
 
 
-        helm install metric metriccollector/ --values metriccollector/values.yaml --namespace aiops --set env.cloudUserValue=$es_user --set env.cloudPasswordValue=$es_password --set env.esUserValue=$system_name --set env.metricLogIndexValue=$local_user --set env.prometheusLogIndexValue=$local_user
+        helm install metric metriccollector/ --values metriccollector/values.yaml --namespace aiops --set env.cloudUserValue=$es_user --set env.cloudPasswordValue=$es_password --set env.esUserValue=$system_name --set env.metricLogIndexValue=$local_user --set env.prometheusLogIndexValue=$local_user --set env.cloudValue="host"
     fi        
     
     if [[ $log == "0" && $metric == "0" ]]
     then
         printf "Deploying Logcollector and Metriccollector"
-        helm install log logcollector/ --values logcollector/values.yaml --namespace=aiops --set env.cloudUserValue=$es_user --set env.cloudPasswordValue=$es_password --set env.esUserValue=$system_name --set env.podLogIndexValue=$local_user --set env.eventLogIndexValue=$local_user
+        helm install log logcollector/ --values logcollector/values.yaml --namespace=aiops --set env.cloudUserValue=$es_user --set env.cloudPasswordValue=$es_password --set env.esUserValue=$system_name --set env.podLogIndexValue=$local_user --set env.eventLogIndexValue=$local_user --set env.cloudValue="host"
 
 	helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 	helm repo update
 	helm install --namespace aiops node-exporter prometheus-community/prometheus-node-exporter
 	
-        helm install metric metriccollector/ --values metriccollector/values.yaml --namespace aiops --set env.cloudUserValue=$es_user --set env.cloudPasswordValue=$es_password --set env.esUserValue=$system_name --set env.metricLogIndexValue=$local_user --set env.prometheusLogIndexValue=$local_user
+        helm install metric metriccollector/ --values metriccollector/values.yaml --namespace aiops --set env.cloudUserValue=$es_user --set env.cloudPasswordValue=$es_password --set env.esUserValue=$system_name --set env.metricLogIndexValue=$local_user --set env.prometheusLogIndexValue=$local_user --set env.cloudValue="host"
     fi
     
     
