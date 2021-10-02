@@ -38,14 +38,27 @@ try:
             except ElasticsearchException as e:
                 print("\n Exception when calling ElasticsearchApi: %s\n" % e)
         dic_data = {}
+         event_data = {'kind':event['raw_object']['kind'],'name':event['raw_object']['metadata']['name'],
+                'namespace':event['raw_object']['metadata']['namespace'],
+                'uid':event['raw_object']['metadata']['uid'],
+                'resourceVersion':event['raw_object']['metadata']['resourceVersion'],
+                'creationTimestamp':event['raw_object']['metadata']['creationTimestamp'],
+                'involvedObject':event['raw_object']['involvedObject'],
+                'reason':event['raw_object']['reason'],
+                'message':event['raw_object']['message'],
+                'source':event['raw_object']['source'],
+                'firstTimestamp':event['raw_object']['firstTimestamp'],
+                'lastTimestamp':event['raw_object']['lastTimestamp'],
+                'type':event['raw_object']['type'],
+                'eventTime':event['raw_object']['eventTime']}
         dic_data['user'] = os.environ["ESUSER"]
         dic_data['type'] = 'events'
         dic_data['agent'] = "log-collector"
         dic_data['datetime'] = datetime.now()
-        dic_data['data'] = event['raw_object']
+        dic_data['data'] = event_data
         dic_data['time'] = round(time.time(), 2)
 
-        print(dic_data)
+        #print(dic_data)
         es_conn_obj.index(index=os.environ['INDEX_NAME'],id=document_id,body=dic_data,ignore=400)    # insert data into Elastic Search
         document_id = document_id+1
         
