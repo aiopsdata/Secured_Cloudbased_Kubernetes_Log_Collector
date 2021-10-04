@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Values.prometheus.metadata.name}}
+  namespace: {{.Values.prometheus.metadata.namespace}}
+  labels:
+    app: metricollector
+spec:
+  replicas: {{.Values.prometheus.replicaCount}}
+  selector:
+    matchLabels:
+      app: metricollector
+  template:
+    metadata:
+      labels:
+        app: metricollector
+    spec:
+      containers:
+      - name: {{.Values.prometheus.containers.name}}
+        image: {{.Values.prometheus.containers.image}}
+        imagePullPolicy: {{.Values.prometheus.containers.imagePullPolicy}}
+        env:
+        - name: {{.Values.env.ESConnectionKey}}
+          value: {{.Values.env.ESConnectionValue}}
+        - name: {{.Values.env.prometheusLogIndexKey}}
+          value: {{.Values.env.prometheusLogIndexValue}}
+        - name: {{.Values.env.prometheusLogDocKey}}
+          value: {{.Values.env.prometheusLogDocValue}}
+        - name: {{.Values.env.prometheusUrlKey}}
+          value: {{.Values.env.prometheusUrlValue}}
+        - name: {{.Values.env.metricLogIndexKey}}
+          value: {{.Values.env.metricLogIndexValue}}
+        - name: {{.Values.env.metricLogDocKey}}
+          value: {{.Values.env.metricLogDocValue}}
+        - name: {{.Values.env.metricApiKey}}
+          value: {{.Values.env.metricApiValue}}
+        - name: {{.Values.env.metricApiVerKey}}
+          value: {{.Values.env.metricApiVerValue}}
+        - name: {{.Values.env.cloudId}}
+          value: {{.Values.env.cloudIdValue}}
+        - name: {{.Values.env.cloudUser}}
+          value: {{.Values.env.cloudUserValue}}
+        - name: {{.Values.env.cloudPassword}}
+          value: {{.Values.env.cloudPasswordValue}}
+        - name: {{.Values.env.cloud}}
+          value: {{.Values.env.cloudValue}}

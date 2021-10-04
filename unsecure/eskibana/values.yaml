@@ -1,0 +1,30 @@
+kibana:
+  metadata:
+    name: kibana
+    namespace: aiops
+  containers:
+    name: kibana
+    image: "docker.elastic.co/kibana/kibana:6.5.4"
+    port: 5601
+    nodePort: 32002
+
+   
+elasticsearch:
+  metadata:
+    name: elasticsearch
+    namespace: aiops
+  containers:
+    name: elasticsearch
+    image: "docker.elastic.co/elasticsearch/elasticsearch:6.5.4"
+    port: 9200
+    nodePort: 32000   
+    cpu: 500m
+    memory: 4Gi
+   
+   
+    
+env:
+  ESUrlKey: ELASTICSEARCH_URL
+  ESUrlValue: "http://elasticsearch:9200"
+  SecretKey: XPACK_SECURITY_ENABLED
+  SecretValue: '"true"'

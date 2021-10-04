@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Values.event.metadata.name}}
+  namespace: {{.Values.event.metadata.namespace}}
+  labels:
+    app: logcollector
+spec:
+  replicas: {{.Values.event.replicaCount}}
+  selector:
+    matchLabels:
+      app: logcollector
+  template:
+    metadata:
+      labels:
+       app: logcollector
+    spec:
+      containers:
+      - name: {{.Values.event.containers.name}}
+        image: {{.Values.event.containers.image}}
+        imagePullPolicy: {{.Values.event.containers.imagePullPolicy}}
+        env:
+        - name: {{.Values.env.ESConnectionKey}}
+          value: {{.Values.env.ESConnectionValue}}
+        - name: {{.Values.env.eventLogIndexKey}}
+          value: {{.Values.env.eventLogIndexValue}}
+        - name: {{.Values.env.eventLogDocKey}}
+          value: {{.Values.env.eventLogDocValue}}
+        - name: {{.Values.env.podLogIndexKey}}
+          value: {{.Values.env.podLogIndexValue}}
+        - name: {{.Values.env.podLogDocKey}}
+          value: {{.Values.env.podLogDocValue}}
+        - name: {{.Values.env.cloudId}}
+          value: {{.Values.env.cloudIdValue}}
+        - name: {{.Values.env.cloudUser}}
+          value: {{.Values.env.cloudUserValue}}
+        - name: {{.Values.env.cloudPassword}}
+          value: {{.Values.env.cloudPasswordValue}}
+        - name: {{.Values.env.cloud}}
+          value: {{.Values.env.cloudValue}}

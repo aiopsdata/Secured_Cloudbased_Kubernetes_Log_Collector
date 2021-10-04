@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Values.kibana.metadata.name}}
+  namespace: {{.Values.kibana.metadata.namespace}}
+spec:
+  selector:
+    matchLabels:
+      run: {{.Values.kibana.metadata.name}}
+  template:
+    metadata:
+      labels:
+        run: {{.Values.kibana.metadata.name}}
+    spec:
+      containers:
+      - name: {{.Values.kibana.containers.name}}
+        image: {{.Values.kibana.containers.image}}
+        env:
+        - name: {{.Values.env.ESUrlKey}}
+          value: {{.Values.env.ESUrlValue}}
+        - name: {{.Values.env.SecretKey}}
+          value: {{.Values.env.SecretValue}}
+        ports:
+        - containerPort: {{.Values.kibana.containers.port}}
+          name: http
+          protocol: TCP
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{.Values.kibana.metadata.name}}
+  namespace: {{.Values.kibana.metadata.namespace}}
+  labels:
+    service: {{.Values.kibana.metadata.name}}
+spec:
+  type: NodePort
+  selector:
+    run: {{.Values.kibana.metadata.name}}
+  ports:
+  - port: {{.Values.kibana.containers.port}}
+    targetPort: {{.Values.kibana.containers.port}}
+    nodePort: {{.Values.kibana.containers.nodePort}}

@@ -1,0 +1,29 @@
+event:
+  metadata:
+    name: logcollector
+    namespace: aiops
+  replicaCount: 1
+  containers:
+    name: logcollector
+    image: aiopsdata/logcollector
+    imagePullPolicy: Always
+
+env:
+  ESConnectionKey: ELASTICSEARCH_URL
+  ESConnectionValue: "elasticsearch:9200"
+  eventLogIndexKey: INDEX_NAME
+  eventLogIndexValue: eventslog
+  eventLogDocKey: DOC_TYPE
+  eventLogDocValue: events
+  podLogIndexKey: PINDEX_NAME
+  podLogIndexValue: podslog
+  podLogDocKey: PDOC_TYPE
+  podLogDocValue: pod
+  cloudId: CLOUD_ID
+  cloudIdValue: cloudid
+  cloudUser: USER
+  cloudUserValue: admin
+  cloudPassword: PASSWORD
+  cloudPasswordValue: admin123
+  cloud: CLOUD
+  cloudValue: host
