@@ -56,6 +56,7 @@ try:
         dic_data['agent'] = "log-collector"
         dic_data['datetime'] = datetime.now()
         dic_data['data'] = event_data
+        dic_data['description'] = {'kind':event['raw_object']['involvedObject']['kind'],'namespace':event['raw_object']['involvedObject']['namespace'],'name':event['raw_object']['involvedObject']['name'],'reason':event['raw_object']['reason'],'message':event['raw_object']['message'],'firstTimestamp':event['raw_object']['firstTimestamp'],'lastTimestamp':event['raw_object']['lastTimestamp'],'type':event['raw_object']['type']}
         dic_data['time'] = round(time.time(), 2)
 
         #print(dic_data)
