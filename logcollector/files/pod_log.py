@@ -56,10 +56,10 @@ while(True):
             date = date.strftime("%d/%m/%Y %H:%M:%S")
             data_dic = json.dumps(dict({'type':'pod','agent' : "log-collector",'datetime': date,'namespace' : namespace, 'pod': podname , 'time': round(time.time(), 2), 'podlog': data}))
 
-        try:
-            es.index(index=os.environ['PINDEX_NAME'],id=document_id,body=data_dic,ignore=400)
-        except ElasticsearchException as e:
-            print("\n Exception when calling ElasticsearchApi->creating connection: %s\n" % e)
+            try:
+                es.index(index=os.environ['PINDEX_NAME'],id=document_id,body=data_dic,ignore=400)
+            except ElasticsearchException as e:
+                print("\n Exception when calling ElasticsearchApi->creating connection: %s\n" % e)
 
         document_id =  document_id + 1
     time.sleep(1)
